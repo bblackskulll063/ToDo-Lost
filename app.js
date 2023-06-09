@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 const { render } = require("ejs");
 const _ = require("lodash");
 
-const db = 'mongodb+srv://todolist:him123@list.jy0ff5a.mongodb.net/todolistDB';
+// const db = 'mongodb+srv://todolist:him123@list.jy0ff5a.mongodb.net/todolistDB';
+const db = "mongodb://localhost:27017/Todo";
 
 
 main().catch(err => console.log(err));
@@ -14,6 +15,7 @@ async function main() {
     await mongoose.connect(db);
 
 }
+mongoose.set('strictQuery', true);
 
 const todoSchema = new mongoose.Schema({
     name: String
@@ -156,5 +158,5 @@ if (port == null || port == "") {
 }
 
 app.listen(port, function () {
-    console.log("Server started successfully");
+    console.log("Server started successfully at 3000");
 });

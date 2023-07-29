@@ -4,22 +4,14 @@ const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
 const { render } = require("ejs");
 const _ = require("lodash");
+require("dotenv").config();
 
-const db = "mongodb+srv://todolist:him123@list.jy0ff5a.mongodb.net/todolistDB";
-
-// mongoose.set('strictQuery', true);
-
-// main().catch(err => console.log(err));
-
-// async function main() {
-//     await mongoose.connect(db);
-
-// }
+// console.log(process.env.key_password);
+const db =process.env.key_password;
 
 mongoose
   .connect(db, { useNewUrlParser: true })
   .then((con) => {
-    console.log(con.connections);
 
     console.log("DB connection completed");
   })
@@ -101,6 +93,8 @@ app.post("/delete", function (req, res) {
   const iditem = req.body.checkbox;
   const listName = req.body.listname;
 
+  console.log(iditem,listName);
+
   if (listName === "Today") {
     Item.findByIdAndRemove(iditem, function (err) {
       if (!err) console.log("successfully deleted specific items from DB.");
@@ -144,8 +138,19 @@ app.get("/about", function (req, res) {
   res.render("about");
 });
 
+
 let port = process.env.PORT || 3000;
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`serve at http://localhost:${port}`);
 });
+
+
+process.on('unhandledRejection', (err) => {
+  console.log(err.name, err.message);
+  console.log('UNHANDLED REJECTION! ');
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
